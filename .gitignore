@@ -1,6 +1,11 @@
+#files created by 'ccmake'
 desktop/yoshimi.desktop
 src/CMakeFiles/
 src/CMakeCache.txt
 src/Makefile
 src/cmake_install.cmake
 
+#files created by 'make'
+src/*.cxx
+src/*.h
+src/yoshimi
