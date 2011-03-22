@@ -1124,6 +1124,7 @@ class PartUI {open : {public Fl_Group, private MiscFuncs}
   Function {Init(Part *part_, int npart_, ProgramBanksUI *progbanksui_)} {open return_type void
   } {
     code {//
+        savebutton = NULL;
         progbanksui = progbanksui_;
         part = part_;
         npart = npart_;
@@ -1293,7 +1294,7 @@ class PartUI {open : {public Fl_Group, private MiscFuncs}
   } {
     code {//
         saveRequired = true;
-        savebutton->activate();} {}
+        if(savebutton!=NULL) savebutton->activate();} {}
   }
   Function {saveProgram(void)} {open selected return_type bool
   } {

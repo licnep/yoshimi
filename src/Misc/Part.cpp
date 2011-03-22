@@ -636,7 +636,6 @@ void Part::NoteOff(unsigned char note) //relase the key
         }
 }
 
-
 // Controllers
 void Part::SetController(unsigned int type, int par)
 {
@@ -843,7 +842,7 @@ void Part::SetController(unsigned int type, int par)
             break;
 
         default:
-            Runtime.Log(string("Ignoring midi control change type ") + asString(type));
+            //Runtime.Log(string("Ignoring midi control change type ") + asString(type));
             break;
     }
 }

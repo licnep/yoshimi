@@ -40,9 +40,6 @@ class Distorsion : public Effect, private WaveShapeSamples
         void cleanup(void);
         void applyfilters(float *efxoutl, float *efxoutr);
 
-    private:
-        inline float dB2rap(float dB) { return exp10f((dB) / 20.0f); }
-
         // Parametrii
         unsigned char Pvolume;       // Volumul or E/R
         unsigned char Ppanning;      // Panning
@@ -55,6 +52,9 @@ class Distorsion : public Effect, private WaveShapeSamples
         unsigned char Phpf;          // highpass filter
         unsigned char Pstereo;       // 0=mono,1=stereo
         unsigned char Pprefiltering; // if you want to do the filtering before the distorsion
+
+    private:
+        inline float dB2rap(float dB) { return exp10f((dB) / 20.0f); }
 
         void setvolume(unsigned char Pvolume_);
         void setpanning(unsigned char Ppanning_);

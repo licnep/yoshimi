@@ -45,7 +45,6 @@ class Alienwah : public Effect
         unsigned char getpar(int npar);
         void cleanup(void);
 
-    private:
         // Alienwah Parameters
         EffectLFO lfo; // lfo-ul Alienwah
         unsigned char Pvolume;
@@ -56,6 +55,7 @@ class Alienwah : public Effect
         unsigned char Pdelay;
         unsigned char Pphase;
 
+        private:
 
         // Control Parameters
         void setvolume(unsigned char Pvolume_);

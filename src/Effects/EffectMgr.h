@@ -65,10 +65,10 @@ class EffectMgr : public Presets
         float *efxoutr;
         bool insertion; // the effect is connected as insertion effect (or not)
         FilterParams *filterpars;
+        Effect *efx;
 
     private:
         int nefx;
-        Effect *efx;
         bool dryonly;
         int privatemoment;
 };

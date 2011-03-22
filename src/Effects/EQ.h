@@ -40,10 +40,6 @@ class EQ : public Effect, private MiscFuncs
         void cleanup(void);
         float getfreqresponse(float freq);
 
-    private:
-        void setvolume(unsigned char Pvolume_);
-        inline float rap2dB(float rap) { return 20.0f * log10f(rap); }
-
         // Parameters
         unsigned char Pvolume;
         struct {
@@ -55,6 +51,11 @@ class EQ : public Effect, private MiscFuncs
             AnalogFilter *l;
             AnalogFilter *r;
         } filter[MAX_EQ_BANDS];
+
+    private:
+        void setvolume(unsigned char Pvolume_);
+        inline float rap2dB(float rap) { return 20.0f * log10f(rap); }
+
 };
 
 #endif

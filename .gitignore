@@ -9,3 +9,6 @@ src/cmake_install.cmake
 src/*.cxx
 src/*.h
 src/yoshimi
+
+#files created by 'make install'
+src/install_manifest.txt

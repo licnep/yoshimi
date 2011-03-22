@@ -37,6 +37,10 @@ using namespace std;
 #include "Misc/SynthHelper.h"
 #include "Misc/Microtonal.h"
 #include "Misc/SynthHelper.h"
+#include "Params/midiController.h"
+#include "WidgetPDialUI.h"
+#include <FL/Fl_Valuator.H>
+#include <list>
 
 class EffectMgr;
 class Part;
@@ -81,6 +85,10 @@ class SynthEngine : private SynthHelper, MiscFuncs
         unsigned int random(void);
 
         Part *part[NUM_MIDI_PARTS];
+
+        //midi learn:
+        void addController(int ccNumber, WidgetPDial* dial);
+        void removeController(midiController* toRemove);
 
         bool shutup;
 
@@ -136,6 +144,8 @@ class SynthEngine : private SynthHelper, MiscFuncs
         float vuRmsPeakR;
         bool vuClippedL;
         bool vuClippedR;
+
+        list<midiController> assignedMidiControls; //contains all the pairs 'recived midi cc'->'action to execute'
 
     private:
         void setController(unsigned char channel, unsigned char ctrltype, unsigned char par);

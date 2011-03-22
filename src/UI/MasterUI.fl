@@ -32,7 +32,8 @@ This file is derivative of ZynAddSubFX original code, modified December 2010
 decl {//
     class MasterUI;
     \#include "MasterMiscUI.h"
-    \#include "PartUI.h"} {public global
+    \#include "PartUI.h"
+    \#include "MidiControllerUI.h"} {public global
 } 
 
 decl {MasterUI *guiMaster;} {public
@@ -131,6 +132,7 @@ class MasterUI {open : {private MiscFuncs}
       progbanksui = new ProgramBanksUI(synth->part[npart]);
       virkeyboard = new VirKeyboard();
       configui = new ConfigUI();
+      midiccwindow = new MidiCCWindow(masterwindow->x()+100,masterwindow->y()+50,316,400,"Midi Controllers");
       presetsui = new PresetsUI();
       paramsui = new ParametersUI();
       yoshiLog = new ConsoleUI();
@@ -198,6 +200,11 @@ class MasterUI {open : {private MiscFuncs}
             label {Se&ttings...}
             callback {configui->Show();}
             tooltip {View, change, save settings} xywh {25 25 100 20} labelsize 12
+          }
+          MenuItem {} {
+            label MidiControllers
+            callback {midiccwindow->Show();}
+            tooltip {mapping of midi cc signals} xywh {15 15 100 20} labelsize 12
           }
           MenuItem {} {
             label {E&xit}

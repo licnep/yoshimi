@@ -187,6 +187,7 @@ set (GuiFluids
     UI/EffUI.fl  UI/PartUI.fl
     UI/MicrotonalUI.fl  UI/MasterUI.fl    UI/MasterMiscUI.fl
     UI/ParametersUI.fl UI/ConsoleUI.fl  UI/ProgramBanksUI.fl
+    UI/MidiControllerUI.fl
 )
 
 fltk_wrap_ui (yoshimi ${GuiFluids})
@@ -233,7 +234,8 @@ set (Params_sources
     Params/ADnoteParameters.cpp  Params/EnvelopeParams.cpp
     Params/FilterParams.cpp  Params/LFOParams.cpp
     Params/SUBnoteParameters.cpp  Params/PADnoteParameters.cpp
-    Params/Controller.cpp  Params/Presets.cpp Params/PresetsStore.cpp
+    Params/Controller.cpp  Params/Presets.cpp Params/PresetsStore.cpp 
+    Params/midiController.cpp Params/ParamChangeFunc.cpp
 )
 
 set (Synth_sources

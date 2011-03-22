@@ -28,6 +28,7 @@
 #include "Sql/ProgramBanks.h"
 #include "Misc/SynthEngine.h"
 
+
 SynthEngine *synth = NULL;
 
 char SynthEngine::random_state[256] = { 0, };
@@ -310,9 +311,32 @@ void SynthEngine::setPitchwheel(unsigned char chan, short int par)
             part[npart]->ctl->setpitchwheel(par);
 }
 
+void SynthEngine::addController(int ccNumber, WidgetPDial* dial) {
+	//midiCCpair temp = {ccNumber, dial};
+        //midiController* temp = new midiController(dial);
+        midiController temp(dial);
+	assignedMidiControls.push_back(temp);
+}
+
+//when the dial widget is destroyed (eg. when the user switches to another part)
+//we have to remove it from the list, to prevent segmentation fault
+void SynthEngine::removeController(midiController* toRemove) {
+        list<midiController>::iterator i;
+	for(i=assignedMidiControls.begin();i!=assignedMidiControls.end();i++) {
+            if (&(*i)==toRemove) {assignedMidiControls.erase(i);break;}
+	}
+}
 
 void SynthEngine::setController(unsigned char channel, unsigned char ctrltype, unsigned char par)
 {
+	list<midiController>::iterator i;
+	for(i=assignedMidiControls.begin();i!=assignedMidiControls.end();i++) {
+            if (i->recording) {i->setMidiCCNumber(ctrltype);}
+            if (i->ccNumber==ctrltype) {
+                i->execute(par);
+            }
+	}
+
     switch (ctrltype)
     {
         case C_bankselectmsb:
