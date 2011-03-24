@@ -6,7 +6,7 @@
 
 parameterStruct::parameterStruct() {
     paramName = parID::PNullParam;
-    partN = 0;
+    partN = -1;
     kitItemN = 0;
     voiceN = 0;
     effN = 0;

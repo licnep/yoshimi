@@ -1806,3 +1806,14 @@ void ADnote::relasekey(void)
     NoteGlobalPar.FilterEnvelope->relasekey();
     NoteGlobalPar.AmpEnvelope->relasekey();
 }
+
+void ADnote::realtimeUpdatePar(parameterStruct *par) {
+    switch (par->paramName) {
+        case parID::PAddSynthAmpLfoIntensity: case parID::PAddSynthAmpLfoFreq:
+            NoteGlobalPar.AmpLfo->updatePars();
+            break;
+        case parID::PAddSynthFreqLfoIntensity: case parID::PAddSynthFreqLfoFreq:
+            NoteGlobalPar.FreqLfo->updatePars();
+            break;
+    }
+}

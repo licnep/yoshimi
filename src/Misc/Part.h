@@ -30,6 +30,7 @@ using namespace std;
 
 #include "Misc/MiscFuncs.h"
 #include "Misc/SynthHelper.h"
+#include "Params/ParamChangeFunc.h"
 
 class ADnoteParameters;
 class SUBnoteParameters;
@@ -150,6 +151,8 @@ class Part : private MiscFuncs, SynthHelper
         bool Pefxbypass[NUM_PART_EFX + 1];
 
         int lastnote;
+
+        void realtimeUpdatePar(parameterStruct *par);
 
     private:
         void applyparameters(void);

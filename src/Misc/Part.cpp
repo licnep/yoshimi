@@ -1492,3 +1492,11 @@ void Part::getfromXML(XMLwrapper *xmlwrap)
     Penabled = 1;
     __sync_and_and_fetch(&partMuted, 0);
 }
+
+void Part::realtimeUpdatePar(parameterStruct *par) {
+    for (int i = 0; i < POLIPHONY; ++i) {
+        if (partnote[i].status != KEY_OFF)  {
+            partnote[i].kititem[par->kitItemN].adnote->realtimeUpdatePar(par);
+        }
+    }
+}

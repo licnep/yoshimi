@@ -5,9 +5,13 @@
  * Created on February 15, 2011, 7:46 PM
  */
 
+#include "Synth/LFO.h"
+
+
 #include "midiController.h"
 #include "Misc/SynthEngine.h"
 #include "PartUI.h"
+#include "Synth/PADnote.h"
 #include <iostream>
 
 
@@ -36,14 +40,14 @@ void midiController::execute(char val) {
     double value = ((customMax-customMin)*((double)val/127)+customMin)*param.max/127.0;
 
     if (DuplicatedKnobInMidiCCPanel!=NULL) {
-        DuplicatedKnobInMidiCCPanel->value(val); //only change the value, no callback
+        DuplicatedKnobInMidiCCPanel->value(value); //only change the value, no callback
     }
     
     //if the knob is visible, just rotate it and call its callback and we're set:
     if (knob!=NULL&&knob->active_r()) {
         knob->value(value);
         knob->do_callback();
-        return;
+        goto realtimeParChange;
     }
     
     //if we're here it means the original knob has been destroyed, we have to change the params manually, no callback this time
@@ -59,6 +63,8 @@ void midiController::execute(char val) {
         printf("pointer e' 2\n");
         doComplexCallback(value);
     }
+    realtimeParChange:
+    if(param.partN!=-1) synth->part[param.partN]->realtimeUpdatePar(&(this->param));
 }
 
 void midiController::rotateDial(double val) {
