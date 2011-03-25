@@ -61,6 +61,7 @@ class FilterParams : public Presets, public Carcass
         float getformantfreq(unsigned char freq);
         float getformantamp(unsigned char amp);
         float getformantq(unsigned char q);
+        void realtimeUpdateQ(unsigned char q);
 
         unsigned char Pcategory;  // Filter category (Analog/Formant/StVar)
         unsigned char Ptype;      // Filter type  (for analog lpf,hpf,bpf..)

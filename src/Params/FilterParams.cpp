@@ -376,3 +376,7 @@ void FilterParams::getfromXML(XMLwrapper *xml)
         xml->exitbranch();
     }
 }
+
+void FilterParams::realtimeUpdateQ(unsigned char q) {
+    Pq = q;
+}
