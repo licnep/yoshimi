@@ -377,6 +377,10 @@ void FilterParams::getfromXML(XMLwrapper *xml)
     }
 }
 
+void FilterParams::realtimeUpdateF(unsigned char f) {
+    Pfreq = f;
+}
+
 void FilterParams::realtimeUpdateQ(unsigned char q) {
     Pq = q;
 }

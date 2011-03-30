@@ -1815,6 +1815,13 @@ void ADnote::realtimeUpdatePar(parameterStruct *par) {
         case parID::PAddSynthFreqLfoIntensity: case parID::PAddSynthFreqLfoFreq:
             NoteGlobalPar.FreqLfo->updatePars();
             break;
+        case parID::PAddSynthFilterLfoIntensity: case parID::PAddSynthFilterLfoFreq:
+            NoteGlobalPar.FilterLfo->updatePars();
+            break;
+        case parID::PAddFilter1: //f
+            partparams->GlobalPar.GlobalFilter->realtimeUpdateF(*((unsigned char*)par->paramPointer));
+            NoteGlobalPar.FilterCenterPitch = partparams->GlobalPar.GlobalFilter->getfreq() + partparams->GlobalPar.PFilterVelocityScale / 127.0f * 6.0f * (velF(velocity, partparams->GlobalPar.PFilterVelocityScaleFunction) - 1);
+            break;
         case parID::PAddFilter2: //Q
             partparams->GlobalPar.GlobalFilter->realtimeUpdateQ(*((unsigned char*)par->paramPointer));
             NoteGlobalPar.FilterQ = partparams->GlobalPar.GlobalFilter->getq();
