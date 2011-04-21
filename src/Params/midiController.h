@@ -17,6 +17,7 @@ class midiController {
 public:
     midiController();
     midiController(WidgetPDial* dial);
+    midiController(XMLwrapper *xml);
     virtual ~midiController();
 
     void execute(char val);
@@ -27,6 +28,7 @@ public:
     void setMidiCCNumber(int n);
     char* getLabel();
     static parameterStruct whichParameterDoesThisDialControl(WidgetPDial* d) ;
+    void add2XML(XMLwrapper *xml);
 
     void setMin(double v);
     void setMax(double v);

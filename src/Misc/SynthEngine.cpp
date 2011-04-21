@@ -806,6 +806,17 @@ void SynthEngine::add2XML(XMLwrapper *xml)
     microtonal.add2XML(xml);
     xml->endbranch();
 
+    //assigned midi controllers:
+    xml->beginbranch("MIDI_CONTROLLERS");
+    int nMidiController = 0;
+    for(list<midiController>::iterator i=assignedMidiControls.begin();i!=assignedMidiControls.end();i++) {
+        xml->beginbranch("MIDI_CONTROLLER",nMidiController);
+        i->add2XML(xml);
+        xml->endbranch();
+        nMidiController++;
+    }
+    xml->endbranch();
+
     for (int npart = 0; npart < NUM_MIDI_PARTS; ++npart)
     {
         xml->beginbranch("PART",npart);
@@ -912,6 +923,19 @@ bool SynthEngine::getfromXML(XMLwrapper *xml)
     if (xml->enterbranch("MICROTONAL"))
     {
         microtonal.getfromXML(xml);
+        xml->exitbranch();
+    }
+
+    //assigned midi controllers:
+    
+    if (xml->enterbranch("MIDI_CONTROLLERS") ) {
+        int nMidiController = 0;
+        while (xml->enterbranch("MIDI_CONTROLLER",nMidiController)) {
+            midiController temp(xml);
+            assignedMidiControls.push_back(temp);
+            xml->exitbranch();
+            nMidiController++;
+        }
         xml->exitbranch();
     }
 
