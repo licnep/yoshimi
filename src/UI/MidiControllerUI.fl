@@ -60,6 +60,7 @@ class MidiCCRack {open : {public Fl_Group}
           dial->setMidiControlled(true);
           dial->callback(dialCallback);
          spinner = new Fl_Spinner(x+115, y+35, 40, 20, "CC signal:");
+         spinner->maximum(127);
          spinner->labelsize(10);
          spinner->callback(spinnerChanged,this);
           Fl_Button* rec = new Fl_Button(x+160, y+35, 47, 20, "REC");

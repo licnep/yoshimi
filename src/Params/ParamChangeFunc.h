@@ -8,6 +8,8 @@
 #ifndef PARAMCHANGEFUNC_H
 #define	PARAMCHANGEFUNC_H
 
+#include "Misc/XMLwrapper.h"
+
 //temp:
 #include <stdio.h>
 
@@ -30,6 +32,10 @@ struct parameterStruct {
     parameterStruct();
     //we redefine the == operator, to be able to compare parameterStructs
     bool operator ==(parameterStruct other);
+
+    void add2XML(XMLwrapper *xml);
+    void loadFromXML(XMLwrapper *xml);
+    void setPointerBasedOnParams();
 };
 
 #endif	/* PARAMCHANGEFUNC_H */

@@ -178,10 +178,6 @@ parameterStruct midiController::whichParameterDoesThisDialControl(WidgetPDial* d
                         sprintf(rparam.label,"AddSynth panning, part:%d",rparam.partN+1);
                         goto resetDialAndReturn;
                     }
-                    if (checkAgainst(&rparam,d,&(synth->part[rparam.partN]->kit[rparam.kitItemN].adpars->GlobalPar.PPanning),parID::PAddSynthPan)) {
-                        sprintf(rparam.label,"AddSynth panning, part:%d",rparam.partN+1);
-                        goto resetDialAndReturn;
-                    }
                     if (checkAgainst(&rparam,d,&Gpar->PPunchStrength,parID::PAddSynthPunchStrength)) {
                         sprintf(rparam.label,"Punch Strength, part:%d",rparam.partN+1);
                         goto resetDialAndReturn;
@@ -907,4 +903,30 @@ void midiController::setMax(double v) {
 void midiController::setMin(double v) {
     if (v>=customMax) return;
     customMin = v;
+}
+
+
+void midiController::add2XML(XMLwrapper *xml) {
+
+    xml->addpar("ccNumber",ccNumber);
+    //xml->addpar("label",label);
+    xml->addpar("customMin",customMin);
+    xml->addpar("customMax",customMax);
+    param.add2XML(xml);
+}
+
+/**
+ * When loading a state from an xml file, we need to create the midiControllers based on the xml
+ * @param xml
+ */
+midiController::midiController(XMLwrapper *xml) {
+    DuplicatedKnobInMidiCCPanel = NULL;
+    SpinnerInMidiCCPanel = NULL;
+    ccNumber=xml->getpar127("ccNumber", 0);
+    recording=0;
+    customMin = xml->getpar127("customMin", 0);
+    customMax = xml->getpar127("customMax", 127);
+
+    this->knob = NULL;
+    this->param.loadFromXML(xml);
 }
