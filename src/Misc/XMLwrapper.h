@@ -47,6 +47,7 @@ class XMLwrapper : private MiscFuncs
         void addparreal(const string name, float val);
         void addparbool(const string name, int val); // 1 => "yes", else "no"
         void addparstr(const string name, const string val); // add string parameter (name and string
+        void addparcharpointer(const string name, char* str); //add a string parameter passed in the form of a char*
         void beginbranch(const string name);         // add a branch
         void beginbranch(const string name, int id); //
         void endbranch(void); // this must be called after each branch (nodes
