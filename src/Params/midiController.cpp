@@ -36,7 +36,7 @@ midiController::midiController(WidgetPDial* dial) {
  */
 void midiController::execute(char val) {
     //we adjust the value according to the custom min & max
-    //if the val is 127 but the max is then, value will be 10, if val is 0 and min is 30, value will be 30
+    //if the val is 127 but the max is ten, value will be 10, if val is 0 and min is 30, value will be 30
     double value = ((customMax-customMin)*((double)val/127)+customMin)*param.max/127.0;
 
     if (DuplicatedKnobInMidiCCPanel!=NULL) {
@@ -909,7 +909,7 @@ void midiController::setMin(double v) {
 void midiController::add2XML(XMLwrapper *xml) {
 
     xml->addpar("ccNumber",ccNumber);
-    //xml->addpar("label",label);
+    //xml->addparcharpointer("label",label); label is never used!
     xml->addpar("customMin",customMin);
     xml->addpar("customMax",customMax);
     param.add2XML(xml);

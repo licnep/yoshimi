@@ -41,6 +41,7 @@ void parameterStruct::add2XML(XMLwrapper* xml) {
     //xml->addpar("duplicated",duplicated); useless
     //xml->addpar("",paramPointer); can't save a pointer
     xml->addpar("pointerType",pointerType);
+    xml->addparcharpointer("label",label);
     xml->addpar("min",min);
     xml->addpar("max",max);
 }
@@ -53,6 +54,7 @@ void parameterStruct::loadFromXML(XMLwrapper *xml) {
     voiceN = xml->getpar("voiceN",0,0,NUM_VOICES);
     effN = xml->getpar("effN",0,0,NUM_SYS_EFX);
     EQbandN = xml->getpar("EQBandN",0,0,MAX_EQ_BANDS);
+    strcpy(label,xml->getparstr("label").c_str());
     min = xml->getpar127("min",0);
     max = xml->getpar127("max",127);
     pointerType = xml->getpar("pointerType",0,-100,100);
