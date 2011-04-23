@@ -49,7 +49,7 @@ void parameterStruct::add2XML(XMLwrapper* xml) {
 void parameterStruct::loadFromXML(XMLwrapper *xml) {
     ///TODO:
     paramName = xml->getpar("paramName",-1,-1,999);
-    partN = xml->getpar("partN",0,0,NUM_MIDI_PARTS);
+    partN = xml->getpar("partN",-1,-1,NUM_MIDI_PARTS);
     kitItemN = xml->getpar("kitItemN",0,0,NUM_KIT_ITEMS);
     voiceN = xml->getpar("voiceN",0,0,NUM_VOICES);
     effN = xml->getpar("effN",0,0,NUM_SYS_EFX);
@@ -63,8 +63,33 @@ void parameterStruct::loadFromXML(XMLwrapper *xml) {
 }
 
 void parameterStruct::setPointerBasedOnParams() {
-    ADnoteGlobalParam* Gpar = &synth->part[this->partN]->kit[this->kitItemN].adpars->GlobalPar;
-    ADnoteVoiceParam* Adpar= &synth->part[this->partN]->kit[this->kitItemN].adpars->VoicePar[this->voiceN];
+    ADnoteGlobalParam* Gpar = NULL;
+    ADnoteVoiceParam* Adpar = NULL;
+    if (this->partN!=-1) {
+        Gpar = &synth->part[this->partN]->kit[this->kitItemN].adpars->GlobalPar;
+        Adpar= &synth->part[this->partN]->kit[this->kitItemN].adpars->VoicePar[this->voiceN];
+    }
+
+    EffectMgr* fx;
+    //if it's an effect it can be both a global effect or a part effect
+    if (this->partN==-1) { //it's a global effect
+        fx = synth->sysefx[this->effN];
+    } else {
+        synth->part[this->partN]->partefx[this->effN];
+    }
+
+    /* This switch is generated with the help of this bash script:
+     *
+     * #!/bin/bash
+     * IFS=`echo -en "\n\b"`
+     *
+     * for line in $(grep -E -i -o '[^,]+,[ ]*parID::[A-Z0-9]+' ./yoshimi/src/Params/midiController.cpp);
+     *  do
+     *   pointer=$(echo "$line" | grep -E -i -o '&[^,]+?')
+     *   parName=$(echo "$line" | grep -E -i -o 'parID.+')
+     *   echo "case $parName :    paramPointer = $pointer;break;"
+     * done
+     */
 
     switch(paramName) {
         case parID::PMasterVolume :    paramPointer = &synth->Pvolume;break;
@@ -176,5 +201,26 @@ void parameterStruct::setPointerBasedOnParams() {
         case parID::PaddModFreqEnv3 :    paramPointer = &Adpar->FMFreqEnvelope->PR_dt ;break;
         case parID::PaddModFreqEnv4 :    paramPointer = &Adpar->FMFreqEnvelope->PR_val ;break;
         case parID::PaddModFreqEnv5 :    paramPointer = &Adpar->FMFreqEnvelope->Penvstretch ;break;
+        case parID::PsysAlien0 :    paramPointer = &((Alienwah*)(fx->efx))->Pvolume;break;
+        case parID::PsysAlien1 :    paramPointer = &((Alienwah*)(fx->efx))->Ppanning;break;
+        case parID::PsysAlien2 :    paramPointer = &((Alienwah*)(fx->efx))->lfo.Pfreq;break;
+        case parID::PsysAlien3 :    paramPointer = &((Alienwah*)(fx->efx))->lfo.Prandomness;break;
+        case parID::PsysAlien5 :    paramPointer = &((Alienwah*)(fx->efx))->lfo.Pstereo;break;
+        case parID::PsysAlien6 :    paramPointer = &((Alienwah*)(fx->efx))->Pdepth;break;
+        case parID::PsysAlien7 :    paramPointer = &((Alienwah*)(fx->efx))->Pfb;break;
+        case parID::PsysAlien9 :    paramPointer = &((Alienwah*)(fx->efx))->Plrcross;break;
+        case parID::PsysAlien10 :    paramPointer = &((Alienwah*)(fx->efx))->Pphase;break;
+        case parID::PsysDis1 :    paramPointer = &((Distorsion*)(fx->efx))->Pvolume;break;
+        case parID::PsysDis2 :    paramPointer = &((Distorsion*)(fx->efx))->Ppanning;break;
+        case parID::PsysDis3 :    paramPointer = &((Distorsion*)(fx->efx))->Plrcross;break;
+        case parID::PsysDis4 :    paramPointer = &((Distorsion*)(fx->efx))->Pdrive;break;
+        case parID::PsysDis5 :    paramPointer = &((Distorsion*)(fx->efx))->Plevel;break;
+        case parID::PsysDis6 :    paramPointer = &((Distorsion*)(fx->efx))->Plpf;break;
+        case parID::PsysDis7 :    paramPointer = &((Distorsion*)(fx->efx))->Phpf;break;
+        case parID::PsysEQgain :    paramPointer = &((EQ*)(fx->efx))->Pvolume;break;
+        case parID::PsysEQBfreq :    paramPointer = &((EQ*)(fx->efx))->filter[this->EQbandN].Pfreq;break;
+        case parID::PsysEQBgain :    paramPointer = &((EQ*)(fx->efx))->filter[this->EQbandN].Pgain;break;
+        case parID::PsysEQBq :    paramPointer = &((EQ*)(fx->efx))->filter[this->EQbandN].Pq;break;
+
     }
 }

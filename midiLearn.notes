@@ -1,0 +1,34 @@
+============Realtime parameter change==================
+
+[[DONE]]:-----------------
+_______________ADsynth Global Parameters:______________
+* LFOs (amplitude, frequency, filter)
+* Filter: Freq, Q
+_______________________________________________________
+
+_______________Part Effects:___________________________
+* Distorsion
+* AlienWah
+* EQ
+_______________________________________________________
+
+[[TODO]]:-----------------
+* better UI for 'cur>min' 'cur>max'
+
+part effects:
+* chorus
+* phaser
+* echo
+
+
+_______________ADsynth Global Parameters:______________
+* panning
+_______________________________________________________
+
+_______________ADsynth Voice Parameters:_______________
+* Amplitude LFO
+* Frequency LFO
+* Filter LFO
+* Filter: Freq, Q
+_______________________________________________________
+
