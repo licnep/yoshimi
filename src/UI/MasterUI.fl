@@ -202,7 +202,7 @@ class MasterUI {open : {private MiscFuncs}
             tooltip {View, change, save settings} xywh {25 25 100 20} labelsize 12
           }
           MenuItem {} {
-            label MidiControllers
+            label {&MIDI controllers}
             callback {midiccwindow->Show();}
             tooltip {mapping of midi cc signals} xywh {15 15 100 20} labelsize 12
           }

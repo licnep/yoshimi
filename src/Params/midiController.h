@@ -11,6 +11,7 @@
 #include <WidgetPDialUI.h>
 #include <FL/Fl_Spinner.H>
 #include "ParamChangeFunc.h"
+#include "Effects/EffectMgr.h"
 
 
 class midiController {
@@ -27,6 +28,7 @@ public:
     void duplicatedKnobCreated(WidgetPDial* duplicatedKnob);
     void setMidiCCNumber(int n);
     char* getLabel();
+    void setLabel(const char* str);
     static parameterStruct whichParameterDoesThisDialControl(WidgetPDial* d) ;
     void add2XML(XMLwrapper *xml);
 
@@ -47,6 +49,7 @@ public:
 private:
     void rotateDial(double val);
     static bool checkAgainst(parameterStruct* p, WidgetPDial* dial, void* original, int parName);
+    static bool checkAgainstEffects(parameterStruct* p, WidgetPDial* dial, EffectMgr* fx);
 };
 
 class parID {
