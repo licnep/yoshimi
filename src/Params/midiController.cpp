@@ -24,11 +24,11 @@ midiController::midiController(WidgetPDial* dial) {
     SpinnerInMidiCCPanel = NULL;
     ccNumber=0;
     recording=0;
-    customMin = 0;
-    customMax = 127;
 
     this->knob = dial;
     this->param = whichParameterDoesThisDialControl(dial);
+    customMin = this->param.min;
+    customMax = this->param.max;
 }
 /**
  * Called from the synth, when it receives a midi cc signal relative to this midiController.
@@ -37,7 +37,8 @@ midiController::midiController(WidgetPDial* dial) {
 void midiController::execute(char val) {
     //we adjust the value according to the custom min & max
     //if the val is 127 but the max is ten, value will be 10, if val is 0 and min is 30, value will be 30
-    double value = ((customMax-customMin)*((double)val/127)+customMin)*param.max/127.0;
+    //double value = ((customMax-customMin)*((double)val/127)+customMin)*param.max/127.0;
+    double value = (customMax-customMin)*((double)val/127) + customMin;
 
     if (DuplicatedKnobInMidiCCPanel!=NULL) {
         DuplicatedKnobInMidiCCPanel->value(value); //only change the value, no callback
@@ -913,7 +914,7 @@ void midiController::doComplexCallback(double val) {
  * @param v
  */
 void midiController::setMax(double v) {
-    if (v<=customMin) return;
+    if (v>param.max) v=param.max; 
     customMax = v;
 }
 /**
@@ -921,7 +922,7 @@ void midiController::setMax(double v) {
  * @param v
  */
 void midiController::setMin(double v) {
-    if (v>=customMax) return;
+    if (v<param.min) v=param.min;
     customMin = v;
 }
 
