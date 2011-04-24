@@ -41,7 +41,6 @@ class Phaser : public Effect
         void cleanup(void);
         void setdryonly(void);
     
-    private:
         // Parametrii Phaser
         EffectLFO lfo;           // <lfo-ul Phaser
         unsigned char Pvolume;
@@ -52,7 +51,8 @@ class Phaser : public Effect
         unsigned char Pstages;
         unsigned char Poutsub;   // <substract the output instead of adding it
         unsigned char Pphase;
-    
+
+    private:
         // Control Parametrii
         void setvolume(unsigned char Pvolume_);
         void setpanning(unsigned char Ppanning_);

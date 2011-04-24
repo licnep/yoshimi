@@ -43,6 +43,15 @@ class Echo : public Effect
         void cleanup(void);
         void setdryonly(void);
 
+        // Parameters
+        unsigned char Pvolume;  // #1 Volume or Dry/Wetness
+        unsigned char Ppanning; // #2 Panning
+        unsigned char Pdelay;   // #3 Delay of the Echo
+        unsigned char Plrdelay; // #4 L/R delay difference
+        unsigned char Plrcross; // #5 L/R Mixing
+        unsigned char Pfb;      // #6 Feedback
+        unsigned char Phidamp;  // #7 Dampening of the Echo
+
     private:
         void initdelays(void);
         void setvolume(unsigned char Pvolume_);
@@ -53,14 +62,6 @@ class Echo : public Effect
         void setfb(unsigned char Pfb_);
         void sethidamp(unsigned char Phidamp_);
 
-        // Parameters
-        unsigned char Pvolume;  // #1 Volume or Dry/Wetness
-        unsigned char Ppanning; // #2 Panning
-        unsigned char Pdelay;   // #3 Delay of the Echo
-        unsigned char Plrdelay; // #4 L/R delay difference
-        unsigned char Plrcross; // #5 L/R Mixing
-        unsigned char Pfb;      // #6 Feedback
-        unsigned char Phidamp;  // #7 Dampening of the Echo
 
         // Real Parameters
         float panning;

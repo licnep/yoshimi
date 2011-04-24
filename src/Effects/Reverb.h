@@ -44,7 +44,6 @@ class Reverb : public Effect
         void changepar(int npar, unsigned char value);
         unsigned char getpar(int npar);
 
-    private:
         // Parametrii
         unsigned char Pvolume;
         unsigned char Ppan;
@@ -59,6 +58,8 @@ class Reverb : public Effect
         unsigned char Ptype;
         unsigned char Proomsize;
         unsigned char Pbandwidth;
+
+    private:
 
         // parameter control
         void setvolume(unsigned char Pvolume_);

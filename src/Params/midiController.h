@@ -95,6 +95,8 @@ public:
     static const int PAddSynthFilterLfoRand = 35;
     static const int PAddSynthFilterLfoFreqRand = 36;
 
+    static const int PsysEfxSend = 37;
+
     static const int PAddSynthFreqEnv1 = 40;
     static const int PAddSynthFreqEnv2 = 41;
     static const int PAddSynthFreqEnv3 = 42;
@@ -217,6 +219,57 @@ public:
     static const int PDynFilter7 = 337;
     static const int PDynFilter8 = 338;
     static const int PDynFilter9 = 339;
+
+    static const int PEcho0 = 340;
+    static const int PEcho1 = 341;
+    static const int PEcho2 = 342;
+    static const int PEcho3 = 343;
+    static const int PEcho4 = 344;
+    static const int PEcho5 = 345;
+    static const int PEcho6 = 346;
+
+    static const int PChorus0 = 350;
+    static const int PChorus1 = 351;
+    static const int PChorus2 = 352;
+    static const int PChorus3 = 353;
+    static const int PChorus4 = 354;
+    static const int PChorus5 = 355;
+    static const int PChorus6 = 356;
+    static const int PChorus7 = 357;
+    static const int PChorus8 = 358;
+    static const int PChorus9 = 359;
+
+    static const int PPhaser0 = 360;
+    static const int PPhaser1 = 361;
+    static const int PPhaser2 = 362;
+    static const int PPhaser3 = 363;
+    static const int PPhaser4 = 364;
+    static const int PPhaser5 = 365;
+    static const int PPhaser6 = 366;
+    static const int PPhaser7 = 367;
+    static const int PPhaser8 = 368;
+    static const int PPhaser9 = 369;
+
+    static const int PContrPortamentoTime = 370;
+    static const int PContrPortamentoUpDn = 371;
+    static const int PContrResonanceDepth = 372;
+    static const int PContrResonanceBand = 373;
+    static const int PContrBandwidthBand = 374;
+    static const int PContrModwheelDepth = 375;
+    static const int PContrPanningDepth = 376;
+    static const int PContrFilterQDepth = 377;
+    static const int PContrFiltercutoffDepth = 378;
+
+    static const int PReverb0 = 380;
+    static const int PReverb1 = 381;
+    static const int PReverb2 = 382;
+    static const int PReverb3 = 383;
+    static const int PReverb4 = 384;
+    static const int PReverb5 = 385;
+    static const int PReverb6 = 386;
+    static const int PReverb7 = 387;
+    static const int PReverb8 = 388;
+    static const int PReverb9 = 389;
 
 };
 

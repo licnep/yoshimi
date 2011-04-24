@@ -46,6 +46,7 @@ decl {\#include <cmath>
 
 decl {\#include <stdio.h>
     \#include <FL/Fl_Menu.H>
+    \#include "Params/midiController.h"
     \#include "MidiControllerUI.h"} {global
 } 
 
@@ -152,6 +153,10 @@ class WidgetPDial {open : {public Fl_Dial}
                                 { "Midi Learn",  0, stampa, (void*)1 },
 				{ 0 }
 			    };
+                            if (midiControlled) {
+                                Fl_Menu_Item item = {"Remove midi control", 0, stampa, (void*)1};
+                                rclick_menu[1] = item;
+                            }
                             const Fl_Menu_Item *m = rclick_menu->popup(Fl::event_x(), Fl::event_y(), 0, 0, 0);
 			    if ( m ) m->do_callback(this, m->user_data());
                          } else {
