@@ -89,10 +89,6 @@ void midiController::removeDialPointer() {
 void midiController::dialCreated(WidgetPDial* dial) {
     if(dial->param.paramName==parID::PNullParam) return;
     if (this->param==dial->param) {
-        printf("this param:paramName = %d\npartN = %d\nkitItemN = %d\nvoiceN = %d\neffN = %d\nEQbandN =%d\n",
-                param.paramName,param.partN,param.kitItemN,param.voiceN,param.effN,param.EQbandN);
-        printf("CREATED:paramName = %d\npartN = %d\nkitItemN = %d\nvoiceN = %d\neffN = %d\nEQbandN =%d\n",
-                dial->param.paramName,dial->param.partN,dial->param.kitItemN,dial->param.voiceN,dial->param.effN,dial->param.EQbandN);
         this->knob = dial;
         dial->setMidiControlled(true);
    }

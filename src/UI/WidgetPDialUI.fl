@@ -341,10 +341,19 @@ class WidgetPDial {open : {public Fl_Dial}
   }
   Function {stampa(Fl_Widget *w, void *v)} {open return_type {static void}
   } {
-    code {WidgetPDial *p = (WidgetPDial*)w;
-    synth->addController(1,p);
-    p->setMidiControlled(true);
-    midiccwindow->Show();} {}
+    code { WidgetPDial *p = (WidgetPDial*)w;
+   if (!p->midiControlled) {
+        synth->addController(1,p);
+        p->setMidiControlled(true);
+        midiccwindow->Show();
+   } else {
+        list<midiController>::iterator i;
+        for(i=synth->assignedMidiControls.begin();i!=synth->assignedMidiControls.end();i++) {
+            if (i->knob==p) {synth->removeController(&(*i));break;}
+        }
+        p->setMidiControlled(false);
+        midiccwindow->updateRack();
+   }} {}
   }
   decl {bool justCreated;} {}
 } 
