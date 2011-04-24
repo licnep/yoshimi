@@ -41,8 +41,6 @@ class DynamicFilter : public Effect
         void cleanup(void);
 
     //	void setdryonly();
-
-    private:
         // Parametrii DynamicFilter
         EffectLFO lfo; // lfo-ul DynamicFilter
         unsigned char Pvolume;
@@ -51,6 +49,8 @@ class DynamicFilter : public Effect
         unsigned char Pampsns;
         unsigned char Pampsnsinv; // if the filter freq is lowered if the input amplitude rises
         unsigned char Pampsmooth; // how smooth the input amplitude changes the filter
+
+    private:
 
         // Parameter Control
         void setvolume(unsigned char Pvolume_);

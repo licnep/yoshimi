@@ -6,14 +6,14 @@ _______________ADsynth Global Parameters:______________
 * Filter: Freq, Q
 _______________________________________________________
 
-_______________Part Effects:___________________________
+_______________Part/system Effects:____________________
 * Distorsion
 * AlienWah
 * EQ
+* DynFilter
 _______________________________________________________
 
 [[TODO]]:-----------------
-* better UI for 'cur>min' 'cur>max'
 
 part effects:
 * chorus

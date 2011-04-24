@@ -850,6 +850,48 @@ bool midiController::checkAgainstEffects(parameterStruct* p, WidgetPDial* dial, 
                 }
             }
             break;
+        case 8: //Dynamic filter
+            if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->Pvolume, parID::PDynFilter0)) {
+                p->pointerType = 2; //complex callback
+                sprintf(p->label,"DynFilter volume");
+                return true;
+            }
+            if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->Ppanning, parID::PDynFilter1)) {
+                p->pointerType = 2; //complex callback
+                sprintf(p->label,"DynFilter panning");
+                return true;
+            }
+            if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->lfo.Pfreq, parID::PDynFilter2)) {
+                p->pointerType = 2; //complex callback
+                sprintf(p->label,"DynFilter freq");
+                return true;
+            }
+            if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->lfo.Prandomness, parID::PDynFilter3)) {
+                p->pointerType = 2; //complex callback
+                sprintf(p->label,"DynFilter randomness");
+                return true;
+            }
+            if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->lfo.Pstereo, parID::PDynFilter5)) {
+                p->pointerType = 2; //complex callback
+                sprintf(p->label,"DynFilter L/R phase shift");
+                return true;
+            }
+            if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->Pdepth, parID::PDynFilter6)) {
+                p->pointerType = 2; //complex callback
+                sprintf(p->label,"DynFilter depth");
+                return true;
+            }
+            if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->Pampsns, parID::PDynFilter7)) {
+                p->pointerType = 2; //complex callback
+                sprintf(p->label,"DynFilter amp. sns");
+                return true;
+            }
+            if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->Pampsmooth, parID::PDynFilter9)) {
+                p->pointerType = 2; //complex callback
+                sprintf(p->label,"DynFilter amp. smooth");
+                return true;
+            }
+            break;
     }
     return false;
 }

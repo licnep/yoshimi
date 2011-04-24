@@ -207,6 +207,17 @@ public:
     static const int PsysAlien9 = 329;
     static const int PsysAlien10 = 3210;
 
+    static const int PDynFilter0 = 330;
+    static const int PDynFilter1 = 331;
+    static const int PDynFilter2 = 332;
+    static const int PDynFilter3 = 333;
+    static const int PDynFilter4 = 334;
+    static const int PDynFilter5 = 335;
+    static const int PDynFilter6 = 336;
+    static const int PDynFilter7 = 337;
+    static const int PDynFilter8 = 338;
+    static const int PDynFilter9 = 339;
+
 };
 
 #endif	/* MIDICONTROLLER_H */
