@@ -43,26 +43,22 @@ void midiController::execute(char val) {
     if (DuplicatedKnobInMidiCCPanel!=NULL) {
         DuplicatedKnobInMidiCCPanel->value(value); //only change the value, no callback
     }
-    
     //if the knob is visible, just rotate it and call its callback and we're set:
-    if (knob!=NULL&&knob->active_r()) {
+    if (knob!=NULL&&knob->active_r()&&knob->visible_r()) {
         knob->value(value);
         knob->do_callback();
         goto realtimeParChange;
     }
-    
+
     //if we're here it means the original knob has been destroyed, we have to change the params manually, no callback this time
-    
     if (param.pointerType==0) { //unsigned char
-        printf("pointer e' 0\n");
         *(unsigned char*)param.paramPointer = value;
     } else if (param.pointerType==1) { //float
-        printf("pointer e' 1\n");
         *(float*)param.paramPointer = value;
-        printf("%f\n",*(float*)param.paramPointer);
-    } else if (param.pointerType==2) { //complex callback
-        printf("pointer e' 2\n");
+    } else if (param.pointerType==2) { //custom complex callback
         doComplexCallback(value);
+    } else if (param.pointerType==3) {//effect parameter
+        ((EffectMgr*)param.paramPointer)->seteffectpar(param.paramNumber,value);
     }
     realtimeParChange:
     if(param.partN!=-1) synth->part[param.partN]->realtimeUpdatePar(&(this->param));
@@ -770,199 +766,185 @@ bool midiController::checkAgainst(parameterStruct* p, WidgetPDial* dial, void* o
 
 bool midiController::checkAgainstEffects(parameterStruct* p, WidgetPDial* dial, EffectMgr* fx) {
 
+    //if it's an effect the pointer will point to the effect manager itself, to call seteffectpar()
     switch (fx->geteffect()) {
         case 0: //No effect
             break;
         case 1: //Reverb
             if (checkAgainst(p,dial,&((Reverb*)(fx->efx))->Pvolume, parID::PReverb0)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Reverb Volume");return true;
+                p->pointerType = 3; p->paramNumber=0;sprintf(p->label,"Reverb Volume");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Reverb*)(fx->efx))->Ppan, parID::PReverb1)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Reverb panning");return true;
+                p->pointerType = 3; p->paramNumber=1;sprintf(p->label,"Reverb panning");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Reverb*)(fx->efx))->Ptime, parID::PReverb2)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Reverb Time");return true;
+                p->pointerType = 3; p->paramNumber=2;sprintf(p->label,"Reverb Time");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Reverb*)(fx->efx))->Pidelay, parID::PReverb3)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Reverb delay");return true;
+                p->pointerType = 3; p->paramNumber=3;sprintf(p->label,"Reverb delay");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Reverb*)(fx->efx))->Pidelayfb, parID::PReverb4)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Reverb delay fb");return true;
+                p->pointerType = 3; p->paramNumber=4;sprintf(p->label,"Reverb delay fb");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Reverb*)(fx->efx))->Plpf, parID::PReverb7)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Reverb LPF");return true;
+                p->pointerType = 3; p->paramNumber=7;sprintf(p->label,"Reverb LPF");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Reverb*)(fx->efx))->Phpf, parID::PReverb8)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Reverb HPF");return true;
+                p->pointerType = 3; p->paramNumber=8;sprintf(p->label,"Reverb HPF");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Reverb*)(fx->efx))->Plohidamp, parID::PReverb9)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Reverb Damp");return true;
+                p->pointerType = 3; p->paramNumber=9;sprintf(p->label,"Reverb Damp");p->paramPointer = (void*)fx;return true;
             }
 
         case 2: //Echo
             if (checkAgainst(p,dial,&((Echo*)(fx->efx))->Pvolume, parID::PEcho0)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Echo Volume");return true;
+                p->pointerType = 3; p->paramNumber=0;sprintf(p->label,"Echo Volume");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Echo*)(fx->efx))->Ppanning, parID::PEcho1)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Echo Panning");return true;
+                p->pointerType = 3; p->paramNumber=1;sprintf(p->label,"Echo Panning");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Echo*)(fx->efx))->Pdelay, parID::PEcho2)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Echo Delay");return true;
+                p->pointerType = 3; p->paramNumber=2;sprintf(p->label,"Echo Delay");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Echo*)(fx->efx))->Plrdelay, parID::PEcho3)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Echo L/R difference");return true;
+                p->pointerType = 3; p->paramNumber=3;sprintf(p->label,"Echo L/R difference");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Echo*)(fx->efx))->Plrcross, parID::PEcho4)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Echo L/R mixing");return true;
+                p->pointerType = 3; p->paramNumber=4;sprintf(p->label,"Echo L/R mixing");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Echo*)(fx->efx))->Pfb, parID::PEcho5)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Echo Feedback");return true;
+                p->pointerType = 3; p->paramNumber=5;sprintf(p->label,"Echo Feedback");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Echo*)(fx->efx))->Phidamp, parID::PEcho6)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Echo Dampening");return true;
+                p->pointerType = 3; p->paramNumber=6;sprintf(p->label,"Echo Dampening");p->paramPointer = (void*)fx;return true;
             }
             break;
         case 3: //Chorus
             if (checkAgainst(p,dial,&((Chorus*)(fx->efx))->Pvolume, parID::PChorus0)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Chorus Volume");return true;
+                p->pointerType = 3; p->paramNumber=0;sprintf(p->label,"Chorus Volume");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Chorus*)(fx->efx))->Ppanning, parID::PChorus1)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Chorus Panning");return true;
+                p->pointerType = 3; p->paramNumber=1;sprintf(p->label,"Chorus Panning");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Chorus*)(fx->efx))->lfo.Pfreq, parID::PChorus2)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Chorus freq.");return true;
+                p->pointerType = 3; p->paramNumber=2;sprintf(p->label,"Chorus freq.");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Chorus*)(fx->efx))->lfo.Prandomness, parID::PChorus3)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Chorus randomness");return true;
+                p->pointerType = 3; p->paramNumber=3;sprintf(p->label,"Chorus randomness");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Chorus*)(fx->efx))->lfo.Pstereo, parID::PChorus5)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Chorus L/R phase shift");return true;
+                p->pointerType = 3; p->paramNumber=5;sprintf(p->label,"Chorus L/R phase shift");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Chorus*)(fx->efx))->Pdepth, parID::PChorus6)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Chorus depth");return true;
+                p->pointerType = 3; p->paramNumber=6;sprintf(p->label,"Chorus depth");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Chorus*)(fx->efx))->Pdelay, parID::PChorus7)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Chorus delay");return true;
+                p->pointerType = 3; p->paramNumber=7;sprintf(p->label,"Chorus delay");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Chorus*)(fx->efx))->Pfb, parID::PChorus8)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Chorus feedback");return true;
+                p->pointerType = 3; p->paramNumber=8;sprintf(p->label,"Chorus feedback");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Chorus*)(fx->efx))->Plrcross, parID::PChorus9)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Chorus L/R cross");return true;
+                p->pointerType = 3; p->paramNumber=9;sprintf(p->label,"Chorus L/R cross");p->paramPointer = (void*)fx;return true;
             }
             break;
         case 4: //Phaser
             if (checkAgainst(p,dial,&((Phaser*)(fx->efx))->Pvolume, parID::PPhaser0)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Phaser Volume");return true;
+                p->pointerType = 3; p->paramNumber=0;sprintf(p->label,"Phaser Volume");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Phaser*)(fx->efx))->Ppanning, parID::PPhaser1)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Phaser panning");return true;
+                p->pointerType = 3; p->paramNumber=1;sprintf(p->label,"Phaser panning");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Phaser*)(fx->efx))->lfo.Pfreq , parID::PPhaser2)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Phaser freq.");return true;
+                p->pointerType = 3; p->paramNumber=2;sprintf(p->label,"Phaser freq.");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Phaser*)(fx->efx))->lfo.Prandomness, parID::PPhaser3)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Phaser randomness");return true;
+                p->pointerType = 3; p->paramNumber=3;sprintf(p->label,"Phaser randomness");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Phaser*)(fx->efx))->lfo.Pstereo, parID::PPhaser5)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Phaser L/R phase shift");return true;
+                p->pointerType = 3; p->paramNumber=5;sprintf(p->label,"Phaser L/R phase shift");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Phaser*)(fx->efx))->Pdepth, parID::PPhaser6)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Phaser depth");return true;
+                p->pointerType = 3; p->paramNumber=6;sprintf(p->label,"Phaser depth");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Phaser*)(fx->efx))->Pfb, parID::PPhaser7)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Phaser Feedback");return true;
+                p->pointerType = 3; p->paramNumber=7;sprintf(p->label,"Phaser Feedback");p->paramPointer = (void*)fx;return true;
             }
             if (checkAgainst(p,dial,&((Phaser*)(fx->efx))->Plrcross, parID::PPhaser9)) {
-                p->pointerType = 2; /*complex callback*/sprintf(p->label,"Phaser L/R routing");return true;
+                p->pointerType = 3; p->paramNumber=9;sprintf(p->label,"Phaser L/R routing");p->paramPointer = (void*)fx;return true;
             }
             break;
         case 5: //AlienWah
             if (checkAgainst(p,dial,&((Alienwah*)(fx->efx))->Pvolume, parID::PsysAlien0)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Alien Volume");
+                p->pointerType = 3; p->paramNumber=0;sprintf(p->label,"Alien Volume");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Alienwah*)(fx->efx))->Ppanning, parID::PsysAlien1)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Alien Panning");
+                p->pointerType = 3; p->paramNumber=1;sprintf(p->label,"Alien Panning");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Alienwah*)(fx->efx))->lfo.Pfreq, parID::PsysAlien2)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Alien Freq");
+                p->pointerType = 3; p->paramNumber=2;sprintf(p->label,"Alien Freq");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Alienwah*)(fx->efx))->lfo.Prandomness, parID::PsysAlien3)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Alien Randomness");
+                p->pointerType = 3; p->paramNumber=3;sprintf(p->label,"Alien Randomness");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Alienwah*)(fx->efx))->lfo.Pstereo, parID::PsysAlien5)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Alien L/R phase shift");
+                p->pointerType = 3; p->paramNumber=5;sprintf(p->label,"Alien L/R phase shift");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Alienwah*)(fx->efx))->Pdepth, parID::PsysAlien6)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Alien Depth");
+                p->pointerType = 3; p->paramNumber=6;sprintf(p->label,"Alien Depth");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Alienwah*)(fx->efx))->Pfb, parID::PsysAlien7)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Alien Feedback");
+                p->pointerType = 3; p->paramNumber=7;sprintf(p->label,"Alien Feedback");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Alienwah*)(fx->efx))->Plrcross, parID::PsysAlien9)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Alien L/R");
+                p->pointerType = 3; p->paramNumber=9;sprintf(p->label,"Alien L/R");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Alienwah*)(fx->efx))->Pphase, parID::PsysAlien10)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Alien Phase");
+                p->pointerType = 3; p->paramNumber=10;sprintf(p->label,"Alien Phase");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             break;
         case 6: //distorsion
             if (checkAgainst(p,dial,&((Distorsion*)(fx->efx))->Pvolume, parID::PsysDis1)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Distorsion Volume");
+                p->pointerType = 3; p->paramNumber=0;sprintf(p->label,"Distorsion Volume");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Distorsion*)(fx->efx))->Ppanning, parID::PsysDis2)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Distorsion Panning");
+                p->pointerType = 3; p->paramNumber=1;sprintf(p->label,"Distorsion Panning");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Distorsion*)(fx->efx))->Plrcross, parID::PsysDis3)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Distorsion L/R cross");
+                p->pointerType = 3; p->paramNumber=2;sprintf(p->label,"Distorsion L/R cross");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Distorsion*)(fx->efx))->Pdrive, parID::PsysDis4)) {
-                sprintf(p->label,"Distorsion Drive");
+                p->pointerType = 3; p->paramNumber=3;sprintf(p->label,"Distorsion Drive");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Distorsion*)(fx->efx))->Plevel, parID::PsysDis5)) {
-                sprintf(p->label,"Distorsion Level");
+                p->pointerType = 3; p->paramNumber=4;sprintf(p->label,"Distorsion Level");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Distorsion*)(fx->efx))->Plpf, parID::PsysDis6)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Distorsion LPFilter");
+                p->pointerType = 3; p->paramNumber=7;sprintf(p->label,"Distorsion LPFilter");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((Distorsion*)(fx->efx))->Phpf, parID::PsysDis7)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"Distorsion HPFilter");
+                p->pointerType = 3; p->paramNumber=8;sprintf(p->label,"Distorsion HPFilter");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             break;
         case 7: //EQ
             if (checkAgainst(p,dial,&((EQ*)(fx->efx))->Pvolume, parID::PsysEQgain)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"EQ gain");
+                p->pointerType = 3; p->paramNumber=0;sprintf(p->label,"EQ gain");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             //check the 3 eqband specific knobs
@@ -971,18 +953,15 @@ bool midiController::checkAgainstEffects(parameterStruct* p, WidgetPDial* dial, 
                 int npb = b*5+10;
                 if (fx->geteffectpar(npb)!=0) { //this EQ band is activated
                     if (checkAgainst(p,dial,&((EQ*)(fx->efx))->filter[b].Pfreq, parID::PsysEQBfreq)) {
-                        p->pointerType = 2; //complex callback
-                        sprintf(p->label,"EQ band freq");
+                        p->pointerType = 3; p->paramNumber=npb+1;sprintf(p->label,"EQ band freq");p->paramPointer = (void*)fx;return true;
                         return true;
                     }
                     if (checkAgainst(p,dial,&((EQ*)(fx->efx))->filter[b].Pgain, parID::PsysEQBgain)) {
-                        p->pointerType = 2; //complex callback
-                        sprintf(p->label,"EQ Band gain");
+                        p->pointerType = 3; p->paramNumber=npb+2;sprintf(p->label,"EQ Band gain");p->paramPointer = (void*)fx;return true;
                         return true;
                     }
                     if (checkAgainst(p,dial,&((EQ*)(fx->efx))->filter[b].Pq, parID::PsysEQBq)) {
-                        p->pointerType = 2; //complex callback
-                        sprintf(p->label,"EQ Band Q");
+                        p->pointerType = 3; p->paramNumber=npb+3;sprintf(p->label,"EQ Band Q");p->paramPointer = (void*)fx;return true;
                         return true;
                     }
                 }
@@ -990,47 +969,41 @@ bool midiController::checkAgainstEffects(parameterStruct* p, WidgetPDial* dial, 
             break;
         case 8: //Dynamic filter
             if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->Pvolume, parID::PDynFilter0)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"DynFilter volume");
+                p->pointerType = 3; p->paramNumber=0;sprintf(p->label,"DynFilter volume");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->Ppanning, parID::PDynFilter1)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"DynFilter panning");
+                p->pointerType = 3; p->paramNumber=1;sprintf(p->label,"DynFilter panning");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->lfo.Pfreq, parID::PDynFilter2)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"DynFilter freq");
+                p->pointerType = 3; p->paramNumber=2;sprintf(p->label,"DynFilter freq");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->lfo.Prandomness, parID::PDynFilter3)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"DynFilter randomness");
+                p->pointerType = 3; p->paramNumber=3;sprintf(p->label,"DynFilter randomness");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->lfo.Pstereo, parID::PDynFilter5)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"DynFilter L/R phase shift");
+                p->pointerType = 3; p->paramNumber=5;sprintf(p->label,"DynFilter L/R phase shift");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->Pdepth, parID::PDynFilter6)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"DynFilter depth");
+                p->pointerType = 3; p->paramNumber=6;sprintf(p->label,"DynFilter depth");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->Pampsns, parID::PDynFilter7)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"DynFilter amp. sns");
+                p->pointerType = 3; p->paramNumber=7;sprintf(p->label,"DynFilter amp. sns");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             if (checkAgainst(p,dial,&((DynamicFilter*)(fx->efx))->Pampsmooth, parID::PDynFilter9)) {
-                p->pointerType = 2; //complex callback
-                sprintf(p->label,"DynFilter amp. smooth");
+                p->pointerType = 3; p->paramNumber=9;sprintf(p->label,"DynFilter amp. smooth");p->paramPointer = (void*)fx;return true;
                 return true;
             }
             break;
     }
+    //it's not an effect, the search failed :(
+    p->paramPointer = NULL;
     return false;
 }
 
@@ -1040,6 +1013,7 @@ bool midiController::checkAgainstEffects(parameterStruct* p, WidgetPDial* dial, 
  * @param val
  */
 void midiController::doComplexCallback(double val) {
+    //THIS FUNCTION IS NEVER USED ATM
     int np;
     switch(param.paramName) {
         //EQ:

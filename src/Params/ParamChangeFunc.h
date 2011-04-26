@@ -22,7 +22,8 @@ struct parameterStruct {
     int EQbandN;
     int duplicated; //is 0 for normal knobs, 1 for the duplicated knobs in the midiCCrack, in order to differentiate them
     void* paramPointer; //ponter to the actual 'number' in the synth parameters to be modified
-    int pointerType; //0=unsigned char*, 1=float*, 2=complex callback
+    int pointerType; //0=unsigned char*, 1=float*, 2=complex callback, 3 effect changepar()
+    int paramNumber; //useful at times, for example for pointerType=3 (effect parameters)
     //min and max of the dial
     float min;
     float max;

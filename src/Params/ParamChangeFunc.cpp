@@ -17,6 +17,7 @@ parameterStruct::parameterStruct() {
     max = 127;
     paramPointer = NULL;
     pointerType = 0; //unsigned char*
+    paramNumber = 0;
 }
 
 //we redefine the == operator, to be able to compare parameterStructs
