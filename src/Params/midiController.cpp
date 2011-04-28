@@ -31,16 +31,20 @@ midiController::midiController(WidgetPDial* dial) {
     customMax = this->param.max;
 }
 /**
- * Called from the synth, when it receives a midi cc signal relative to this midiController.
- * It changes the parameter controlled by this controller
+ * Usually called from the synth, when it receives a midi cc signal relative to this midiController.
+ * It changes the parameter controlled by this controller. In this case midiControlled=true (default)
+ * 
+ * This function is also called when rotating a duplicated knob in the midi controllers window. In this
+ * case midiControlled=false.
  */
-void midiController::execute(char val) {
+void midiController::execute(char val, bool midiControlled) {
     //we adjust the value according to the custom min & max
     //if the val is 127 but the max is ten, value will be 10, if val is 0 and min is 30, value will be 30
     //double value = ((customMax-customMin)*((double)val/127)+customMin)*param.max/127.0;
     double value = (customMax-customMin)*((double)val/127) + customMin;
+    if (!midiControlled) value = (param.max-param.min)*((double)val/127) + param.min;
 
-    if (DuplicatedKnobInMidiCCPanel!=NULL) {
+    if (midiControlled&&DuplicatedKnobInMidiCCPanel!=NULL) {
         DuplicatedKnobInMidiCCPanel->value(value); //only change the value, no callback
     }
     //if the knob is visible, just rotate it and call its callback and we're set:

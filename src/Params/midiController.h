@@ -21,7 +21,7 @@ public:
     midiController(XMLwrapper *xml);
     virtual ~midiController();
 
-    void execute(char val);
+    void execute(char val, bool midiControlled = true);
     void doComplexCallback(double val);
     void removeDialPointer();
     void dialCreated(WidgetPDial* dial);

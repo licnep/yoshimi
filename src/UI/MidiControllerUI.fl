@@ -169,10 +169,11 @@ class MidiCCRack {open : {public Fl_Group}
   Function {dialCallback(Fl_Widget* w, void* p)} {open private return_type {static void}
   } {
     code {MidiCCRack* caller = (MidiCCRack*)w->parent()->parent();
-if (caller->controller->knob!=NULL) {
-  caller->controller->knob->value( ((Fl_Dial*)w)->value() );
-  caller->controller->knob->do_callback();
-}} {selected
+  char val;
+  WidgetPDial* dial = (WidgetPDial*)w;
+  //bring the value back from 0 to 127, as if it was a midi cc signal
+  val = 127*dial->value()/dial->maximum();
+  caller->controller->execute(val,false);} {selected
     }
   }
   Function {titleCallback(Fl_Widget* w, void* p)} {open private return_type {static void}
