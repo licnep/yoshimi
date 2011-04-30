@@ -191,6 +191,7 @@ class MidiCCWindow {open : Fl_Double_Window
   Function {MidiCCWindow(int x, int y, int w, int h, const char *title=0):Fl_Double_Window(300,300,w,h,title)} {open return_type void
   } {
     code {scrollArea = new Fl_Scroll(0,0,this->w(),this->h(),"");
+      scrollArea->type(Fl_Scroll::VERTICAL_ALWAYS);
 end();
 updateRack();} {}
   }
