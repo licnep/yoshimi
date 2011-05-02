@@ -23,7 +23,7 @@ midiController::midiController(WidgetPDial* dial) {
     DuplicatedKnobInMidiCCPanel = NULL;
     SpinnerInMidiCCPanel = NULL;
     ccNumber=0;
-    recording=0;
+    recording=1;
 
     this->knob = dial;
     this->param = whichParameterDoesThisDialControl(dial);
