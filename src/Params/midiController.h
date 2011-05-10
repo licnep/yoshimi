@@ -34,7 +34,9 @@ public:
 
     void setMin(double v);
     void setMax(double v);
+    void setChannel(int ch);
 
+    int midiChannel;
     int ccNumber;
     parameterStruct param;
 

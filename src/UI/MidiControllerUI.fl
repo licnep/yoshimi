@@ -43,7 +43,7 @@ decl {MidiCCWindow* midiccwindow = NULL;} {global
 
 class MidiCCRack {open : {public Fl_Group}
 } {
-  decl {Fl_Group* embossedGroup;WidgetPDial* dial;Fl_Input* title;Fl_Spinner* spinner;midiController* controller;
+  decl {Fl_Group* embossedGroup;WidgetPDial* dial;Fl_Input* title;Fl_Spinner* spinner;Fl_Spinner* Channelspinner;midiController* controller;
     Fl_Value_Input* maxInput; Fl_Value_Input* minInput;} {}
   Function {MidiCCRack(int x, int y, int w, int h) : Fl_Group(x,y,w,h)} {open
   } {
@@ -63,40 +63,46 @@ class MidiCCRack {open : {public Fl_Group}
           dial->param.duplicated=1;
           dial->setMidiControlled(true);
           dial->callback(dialCallback);
-         spinner = new Fl_Spinner(x+115, y+25, 40, 20, "CC signal:");
+         spinner = new Fl_Spinner(x+115, y+25, 40, 17, "CC signal:");
          spinner->maximum(127);
          spinner->labelsize(10);
+         spinner->textsize(10);
          spinner->callback(spinnerChanged,this);
-          Fl_Button* rec = new Fl_Button(x+115, y+50, 40, 15, "REC");
-          rec->tooltip("click, then move the controller you want to associate with this value");
+          Fl_Button* rec = new Fl_Button(x+155, y+25, 15, 15, "R");
+          rec->tooltip("Record (click, then move the controller you want to associate with this value)");
           rec->box(FL_PLASTIC_UP_BOX);
           rec->color((Fl_Color)90);
           rec->selection_color((Fl_Color)93);
           rec->labelsize(10);
           rec->callback(startRecording,this);
+         Channelspinner = new Fl_Spinner(x+115, y+45, 40, 17, "Channel:");
+         Channelspinner->maximum(127);
+         Channelspinner->labelsize(10);
+         Channelspinner->textsize(10);
+         Channelspinner->callback(channelChanged,this);
           Fl_Button* removeBtn = new Fl_Button(x+280-1, y+3, 18, 18, "X");
           removeBtn->color((Fl_Color)9);
           removeBtn->selection_color((Fl_Color)9);
           removeBtn->callback(removeController,this);
-          minInput = new Fl_Value_Input(x+210, y+25,35,15,"min val");
+          minInput = new Fl_Value_Input(x+230, y+25,35,15,"min val");
           minInput->tooltip("map 0 on the midi cc to another arbitrary minimum");
           minInput->maximum(127);
           minInput->labelsize(10);
           minInput->textsize(10);
           minInput->callback(updateMin,this);
-          maxInput = new Fl_Value_Input(x+210, y+50,35,15,"max val");
+          maxInput = new Fl_Value_Input(x+230, y+50,35,15,"max val");
           maxInput->tooltip("map 127 on the midi cc to another arbitrary maximum");
           maxInput->maximum(127);
           maxInput->value(127);
           maxInput->labelsize(10);
           maxInput->textsize(10);
           maxInput->callback(updateMax,this);
-          Fl_Button* setMinBtn = new Fl_Button(x+245, y+25,24,15,"cur");
+          Fl_Button* setMinBtn = new Fl_Button(x+265, y+25,24,15,"cur");
           setMinBtn->tooltip("set current value as minimum");
           setMinBtn->box(FL_PLASTIC_UP_BOX);
           setMinBtn->labelsize(10);
           setMinBtn->callback(setMin, this);
-	  Fl_Button* setMaxBtn = new Fl_Button(x+245, y+50,24,15,"cur");
+	  Fl_Button* setMaxBtn = new Fl_Button(x+265, y+50,24,15,"cur");
           setMaxBtn->tooltip("set current value as maximum");
           setMaxBtn->box(FL_PLASTIC_UP_BOX);
           setMaxBtn->labelsize(10);
@@ -109,6 +115,7 @@ class MidiCCRack {open : {public Fl_Group}
     code {controller = contr;
       title->value(contr->getLabel());
       spinner->value(contr->ccNumber);
+      Channelspinner->value(contr->midiChannel+1);
       contr->duplicatedKnobCreated(dial);
       dial->maximum(contr->param.max);
       dial->minimum(contr->param.min);
@@ -135,6 +142,12 @@ class MidiCCRack {open : {public Fl_Group}
     code {MidiCCRack* caller = (MidiCCRack*)p;
         int value = caller->spinner->value();
         caller->controller->setMidiCCNumber(value);} {}
+  }
+  Function {channelChanged(Fl_Widget* w, void* p)} {open private return_type {static void}
+  } {
+    code {MidiCCRack* caller = (MidiCCRack*)p;
+        int value = caller->Channelspinner->value() -1;
+        caller->controller->setChannel(value);} {}
   }
   Function {setMin(Fl_Widget* w, void* p)} {open private return_type {static void}
   } {

@@ -1317,7 +1317,7 @@ class PartUI {open : {public Fl_Group, private MiscFuncs}
   decl {SUBnoteUI *subnoteui;} {}
   decl {PADnoteUI *padnoteui;} {}
   decl {PartSysEffSend *psyef[NUM_SYS_EFX];} {}
-  decl {int npart;} {}
+  decl {int npart;} {public}
   decl {int ninseff;} {}
   decl {int lastkititem;} {}
   decl {PartKitItem *partkititem[NUM_KIT_ITEMS];} {}

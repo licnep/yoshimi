@@ -12,6 +12,7 @@
 #include "Misc/SynthEngine.h"
 #include "PartUI.h"
 #include "Synth/PADnote.h"
+#include "MasterUI.h"
 #include <iostream>
 
 
@@ -22,11 +23,15 @@ midiController::midiController(WidgetPDial* dial) {
 
     DuplicatedKnobInMidiCCPanel = NULL;
     SpinnerInMidiCCPanel = NULL;
+    midiChannel = 0;
     ccNumber=0;
     recording=1;
 
     this->knob = dial;
     this->param = whichParameterDoesThisDialControl(dial);
+    if (param.partN>-1) { //it's a part specific parameter
+        midiChannel = synth->part[param.partN]->midichannel;
+    }
     customMin = this->param.min;
     customMax = this->param.max;
 }
@@ -157,7 +162,7 @@ parameterStruct midiController::whichParameterDoesThisDialControl(WidgetPDial* d
     
     for (int i=0;i<NUM_MIDI_PARTS;i++) {
         //ONLY CHECK ACTIVE PARTS
-        if(synth->part[i]->Penabled) {
+        if(synth->part[i]->Penabled||(guiMaster->partui->npart==i)) { //only if the part is enabled or shown
             rparam.partN = i;
             if (checkAgainst(&rparam,d,&synth->part[i]->Ppanning,parID::PPartPanning)) {
                 sprintf(rparam.label,"Panning, part:%d",rparam.partN+1);
@@ -1084,6 +1089,9 @@ void midiController::setMin(double v) {
     customMin = v;
 }
 
+void midiController::setChannel(int ch) {
+    midiChannel = ch;
+}
 
 void midiController::add2XML(XMLwrapper *xml) {
 
