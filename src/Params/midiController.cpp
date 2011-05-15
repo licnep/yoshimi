@@ -1095,6 +1095,7 @@ void midiController::setChannel(int ch) {
 
 void midiController::add2XML(XMLwrapper *xml) {
 
+    xml->addpar("midiChannel",midiChannel);
     xml->addpar("ccNumber",ccNumber);
     //xml->addparcharpointer("label",label); label is never used!
     xml->addpar("customMin",customMin);
@@ -1109,6 +1110,7 @@ void midiController::add2XML(XMLwrapper *xml) {
 midiController::midiController(XMLwrapper *xml) {
     DuplicatedKnobInMidiCCPanel = NULL;
     SpinnerInMidiCCPanel = NULL;
+    midiChannel = xml->getpar127("midiChannel",0);
     ccNumber=xml->getpar127("ccNumber", 0);
     recording=0;
     customMin = xml->getpar127("customMin", 0);
