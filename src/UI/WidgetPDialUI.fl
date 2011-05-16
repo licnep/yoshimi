@@ -47,7 +47,8 @@ decl {\#include <cmath>
 decl {\#include <stdio.h>
     \#include <FL/Fl_Menu.H>
     \#include "Params/midiController.h"
-    \#include "MidiControllerUI.h"} {global
+    \#include "MidiControllerUI.h"
+    \#include <FL/Fl_Shared_Image.H>} {global
 } 
 
 class TipWin {open : {public Fl_Menu_Window, MiscFuncs}
@@ -238,50 +239,32 @@ class WidgetPDial {open : {public Fl_Dial}
         int cx = x(), cy = y(), sx = w(), sy = h();
         // clears the button face
         pdialcolor(190, 190, 200);
-        fl_pie(cx - 1, cy - 1, sx + 2, sy + 2, 0, 360);
+        fl_color(110,110,110);
+        //fl_pie(cx - 1, cy - 1, sx + 2, sy + 2, 0, 360);
+        //fl_rectf(cx,cy,sx,sy);
+        double d = (sx>sy)?sy:sx; // d = the smallest side -2
+        fl_pie(cx-1,cy-1,d+2,d+2,0,360);
 
         // Draws the button face (gradinet)
-        drawgradient(cx, cy, sx, 0.5, 1.0);
+        //drawgradient(cx, cy, sx, 0.5, 1.0);
 
         double val = (value() - minimum()) / (maximum() - minimum());
 
-        // draws the scale
-        pdialcolor(220, 220, 250);
-        double a1 = angle1(), a2 = angle2();
-        for (int i = 0; i < 12; ++i)
-        {
-            double a = -i / 12.0 * 360.0 - val * (a2 - a1) - a1;
-            fl_pie(cx, cy, sx, sy, a + 270 - 3, a + 3 + 270);
-        }
-        drawgradient(cx, cy, sx, 0.0, 0.75);
-        // draws the value
-        double a = -(a2 - a1) * val - a1;
-
-        // draws the max and min points
-        pdialcolor(0, 100, 200);
-        int xp = (int)(cx + sx / 2.0f + sx / 2.0f * sinf(angle1() / 180.0f * PI));
-        int yp = (int)(cy + sy / 2.0f + sy / 2.0f * cosf(angle1() / 180.0f * PI));
-        fl_pie(xp - 2, yp - 2, 4, 4, 0, 360);
-
-        xp = (int)(cx + sx / 2.0f + sx / 2.0f * sinf(angle2() / 180.0f * PI));
-        yp = (int)(cy + sy / 2.0f + sy / 2.0f * cosf(angle2() / 180.0f * PI));
-        fl_pie(xp - 2, yp - 2, 4, 4, 0, 360);
-
-        fl_push_matrix();
-
-        fl_translate(cx + sx / 2, cy + sy / 2);
-        fl_rotate(a - 90.0f);
-
-        fl_translate(sx / 2, 0);
-
-        fl_begin_polygon();
-        if (!Controllable) {pdialcolor(0, 0, 255);}
-        else { pdialcolor((midiControlled?255:100), 0, 0);}
-        fl_vertex(-10, -4);
-        fl_vertex(-10, 4);
-        fl_vertex(0, 0);
-        fl_end_polygon();
-        fl_pop_matrix();} {}
+        //ALOX:
+        //Fl_XPM_Image *dialImg = new Fl_XPM_Image("serie.xpm");
+        Fl_Shared_Image* dialImg;
+        dialImg = (d>30)?Fl_Shared_Image::get("serie35a.xpm"):Fl_Shared_Image::get("serie30a.xpm");
+        int vv = val*127;
+        //the knob image is 16 columns x 8 rows, every knob is 35x35
+        d = d-2;
+        int NX = floor(vv/16);
+        int NY = vv%16;
+        int originY = d*NX;
+        int originX = d*NY;
+        //dialImg->copy(sx*16,sy*8)->draw(cx,cy,35,35,originX,originY);
+        Fl_Image* scaledImg = dialImg->copy(d*16,d*8);
+        scaledImg->draw(cx+1,cy+1,d,d,originX,originY);
+        delete(scaledImg);} {}
   }
   Function {pdialcolor(int r,int g,int b)} {return_type void
   } {
