@@ -9,7 +9,7 @@ parameterStruct::parameterStruct() {
     partN = -1;
     kitItemN = 0;
     voiceN = 0;
-    effN = 0;
+    effN = -1;
     EQbandN = 0;
     duplicated = 0;
     label[0] = '\0';
@@ -73,10 +73,13 @@ void parameterStruct::setPointerBasedOnParams() {
 
     EffectMgr* fx;
     //if it's an effect it can be both a global effect or a part effect
-    if (this->partN==-1) { //it's a global effect
-        fx = synth->sysefx[this->effN];
-    } else {
-        synth->part[this->partN]->partefx[this->effN];
+    if (this->effN!=-1) { //it's an effect
+        if (this->partN==-1) { //it's a global effect
+            fx = synth->sysefx[this->effN];
+        } else {
+            fx = synth->part[this->partN]->partefx[this->effN];
+        }
+        paramPointer = fx; return;
     }
 
     /* This switch is generated with the help of this bash script:
@@ -202,26 +205,6 @@ void parameterStruct::setPointerBasedOnParams() {
         case parID::PaddModFreqEnv3 :    paramPointer = &Adpar->FMFreqEnvelope->PR_dt ;break;
         case parID::PaddModFreqEnv4 :    paramPointer = &Adpar->FMFreqEnvelope->PR_val ;break;
         case parID::PaddModFreqEnv5 :    paramPointer = &Adpar->FMFreqEnvelope->Penvstretch ;break;
-        case parID::PsysAlien0 :    paramPointer = &((Alienwah*)(fx->efx))->Pvolume;break;
-        case parID::PsysAlien1 :    paramPointer = &((Alienwah*)(fx->efx))->Ppanning;break;
-        case parID::PsysAlien2 :    paramPointer = &((Alienwah*)(fx->efx))->lfo.Pfreq;break;
-        case parID::PsysAlien3 :    paramPointer = &((Alienwah*)(fx->efx))->lfo.Prandomness;break;
-        case parID::PsysAlien5 :    paramPointer = &((Alienwah*)(fx->efx))->lfo.Pstereo;break;
-        case parID::PsysAlien6 :    paramPointer = &((Alienwah*)(fx->efx))->Pdepth;break;
-        case parID::PsysAlien7 :    paramPointer = &((Alienwah*)(fx->efx))->Pfb;break;
-        case parID::PsysAlien9 :    paramPointer = &((Alienwah*)(fx->efx))->Plrcross;break;
-        case parID::PsysAlien10 :    paramPointer = &((Alienwah*)(fx->efx))->Pphase;break;
-        case parID::PsysDis1 :    paramPointer = &((Distorsion*)(fx->efx))->Pvolume;break;
-        case parID::PsysDis2 :    paramPointer = &((Distorsion*)(fx->efx))->Ppanning;break;
-        case parID::PsysDis3 :    paramPointer = &((Distorsion*)(fx->efx))->Plrcross;break;
-        case parID::PsysDis4 :    paramPointer = &((Distorsion*)(fx->efx))->Pdrive;break;
-        case parID::PsysDis5 :    paramPointer = &((Distorsion*)(fx->efx))->Plevel;break;
-        case parID::PsysDis6 :    paramPointer = &((Distorsion*)(fx->efx))->Plpf;break;
-        case parID::PsysDis7 :    paramPointer = &((Distorsion*)(fx->efx))->Phpf;break;
-        case parID::PsysEQgain :    paramPointer = &((EQ*)(fx->efx))->Pvolume;break;
-        case parID::PsysEQBfreq :    paramPointer = &((EQ*)(fx->efx))->filter[this->EQbandN].Pfreq;break;
-        case parID::PsysEQBgain :    paramPointer = &((EQ*)(fx->efx))->filter[this->EQbandN].Pgain;break;
-        case parID::PsysEQBq :    paramPointer = &((EQ*)(fx->efx))->filter[this->EQbandN].Pq;break;
 
     }
 }

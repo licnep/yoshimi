@@ -169,6 +169,7 @@ parameterStruct midiController::whichParameterDoesThisDialControl(WidgetPDial* d
                 goto resetDialAndReturn;
             }
             if (checkAgainst(&rparam,d,&synth->part[i]->Pvolume,parID::PPartVolume)) {
+                rparam.pointerType = 2;
                 sprintf(rparam.label,"Volume, part:%d",rparam.partN+1);
                 goto resetDialAndReturn;
             }
@@ -1025,8 +1026,12 @@ void midiController::doComplexCallback(double val) {
     //THIS FUNCTION IS NEVER USED ATM
     int np;
     switch(param.paramName) {
+        case parID::PPartVolume:
+            synth->part[param.partN]->setPvolume((char)val);
+            break;
         //EQ:
         case parID::PsysEQgain:
+            np = param.EQbandN*5+10;
             synth->sysefx[param.effN]->seteffectpar(np,lrintf((unsigned char)val));
             /*if (knob!=NULL) { //if the eq graph is shown:
                 ((EffUI*)knob->parent()->parent())->eqgraph->redraw();
