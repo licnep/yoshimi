@@ -53,7 +53,7 @@ void parameterStruct::loadFromXML(XMLwrapper *xml) {
     partN = xml->getpar("partN",-1,-1,NUM_MIDI_PARTS);
     kitItemN = xml->getpar("kitItemN",0,0,NUM_KIT_ITEMS);
     voiceN = xml->getpar("voiceN",0,0,NUM_VOICES);
-    effN = xml->getpar("effN",0,0,NUM_SYS_EFX);
+    effN = xml->getpar("effN",-1,-1,NUM_SYS_EFX);
     EQbandN = xml->getpar("EQBandN",0,0,MAX_EQ_BANDS);
     strcpy(label,xml->getparstr("label").c_str());
     min = xml->getpar127("min",0);
