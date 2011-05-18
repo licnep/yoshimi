@@ -169,6 +169,14 @@ else(FONTCONFIG_FOUND)
     message (FATAL_ERROR "fontconfig>=0.22 required but not found")
 endif(FONTCONFIG_FOUND)
 
+# libcairo
+pkg_check_modules (LIBCAIRO REQUIRED cairo)
+if (LIBCAIRO_FOUND)
+    message (STATUS "Found libcairo ${LIBCAIRO_VERSION}")
+else (LIBCAIRO_FOUND)
+    message (FATAL_ERROR "libcairo required but not found")
+endif (LIBCAIRO_FOUND)
+
 # fltk
 find_package (FLTK REQUIRED)
 if (FLTK_FOUND)
@@ -333,6 +341,7 @@ include_directories (AFTER
     ${FLTK_INCLUDE_DIR}
     ${SQLITE3_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
+    ${LIBCAIRO_INCLUDE_DIRS}
 )
 
 set(ExternLibraries
@@ -344,6 +353,7 @@ set(ExternLibraries
     ${JACK_LIBRARIES}
     ${LIBSNDFILE_LIBRARIES}
     ${SQLITE3_LIBRARIES}
+    ${LIBCAIRO_LIBRARIES}
     z
 )
 
