@@ -181,6 +181,7 @@ parameterStruct midiController::whichParameterDoesThisDialControl(WidgetPDial* d
                     sprintf(rparam.label,"Sys effect send, part:%d, effect:%d",rparam.partN+1,rparam.effN+1); goto resetDialAndReturn;
                 }
             }
+            rparam.effN = -1;
 
             //Controllers:
             if (checkAgainst(&rparam,d,&synth->part[i]->ctl->portamento.time,parID::PContrPortamentoTime)) {
