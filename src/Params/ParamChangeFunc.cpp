@@ -43,6 +43,7 @@ void parameterStruct::add2XML(XMLwrapper* xml) {
     //xml->addpar("",paramPointer); can't save a pointer
     xml->addpar("pointerType",pointerType);
     xml->addparcharpointer("label",label);
+    xml->addpar("paramNumber",paramNumber);
     xml->addpar("min",min);
     xml->addpar("max",max);
 }
@@ -59,6 +60,8 @@ void parameterStruct::loadFromXML(XMLwrapper *xml) {
     min = xml->getpar127("min",0);
     max = xml->getpar127("max",127);
     pointerType = xml->getpar("pointerType",0,-100,100);
+    paramNumber = xml->getpar("paramNumber",0,0,999);
+
     this->setPointerBasedOnParams();
 
 }

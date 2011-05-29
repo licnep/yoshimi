@@ -288,7 +288,11 @@ class WidgetPDial {open : {public Fl_Dial}
             if(midiControlled) {
                 cairo_set_source_rgb(cr,1,1,0); //yellow
             } else {
-                cairo_set_source_rgb(cr,0,197.0/255,245.0/255); //light blue
+                if (Controllable) {
+                    cairo_set_source_rgb(cr,0,197.0/255,245.0/255); //light blue
+                } else {
+                    cairo_set_source_rgb(cr,245.0,197.0/255,0/255); //red
+                }
             }
         } else {
             cairo_set_source_rgb(cr,0.6,0.7,0.8);
