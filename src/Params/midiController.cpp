@@ -165,6 +165,7 @@ parameterStruct midiController::whichParameterDoesThisDialControl(WidgetPDial* d
         if(synth->part[i]->Penabled||(guiMaster->partui->npart==i)) { //only if the part is enabled or shown
             rparam.partN = i;
             if (checkAgainst(&rparam,d,&synth->part[i]->Ppanning,parID::PPartPanning)) {
+                rparam.pointerType = 2;
                 sprintf(rparam.label,"Panning, part:%d",rparam.partN+1);
                 goto resetDialAndReturn;
             }
@@ -1029,6 +1030,9 @@ void midiController::doComplexCallback(double val) {
     switch(param.paramName) {
         case parID::PPartVolume:
             synth->part[param.partN]->setPvolume((char)val);
+            break;
+        case parID::PPartPanning:
+            synth->part[param.partN]->setPpanning((char)val);
             break;
         //EQ:
         case parID::PsysEQgain:
