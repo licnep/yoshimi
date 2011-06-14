@@ -360,8 +360,7 @@ class WidgetPDial {open : {public Fl_Dial}
             for(i=synth->assignedMidiControls.begin();i!=synth->assignedMidiControls.end();i++) {
                i->dialCreated(this);
             }
-            if(this->active_r()==true) justCreated=false;} {selected
-    }
+            if(this->active_r()==true) justCreated=false;} {}
   }
   decl {using Fl_Widget::callback;} {public
   }
@@ -375,7 +374,7 @@ class WidgetPDial {open : {public Fl_Dial}
   }
   Function {stampa(Fl_Widget *w, void *v)} {open return_type {static void}
   } {
-    code { WidgetPDial *p = (WidgetPDial*)w;
+    code {WidgetPDial *p = (WidgetPDial*)w;
    if (!p->midiControlled) {
         synth->addController(1,p);
         p->setMidiControlled(true);
@@ -390,4 +389,18 @@ class WidgetPDial {open : {public Fl_Dial}
    }} {}
   }
   decl {bool justCreated;} {}
+  Function {refreshParameter()} {open selected return_type void
+  } {
+    code {//this function is used by some stuff (eg. the eq. band-specific knobs)
+          //that does not recreate the knobs but just changes what they do
+          justCreated = true;
+          if (midiControlled) {
+              midiControlled = false;
+              list<midiController>::iterator i;
+              for(i=synth->assignedMidiControls.begin();i!=synth->assignedMidiControls.end();i++) {
+                if (i->knob==this) i->removeDialPointer();
+              }
+          }
+          checkSetParameter();} {}
+  }
 } 
