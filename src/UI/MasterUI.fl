@@ -920,6 +920,7 @@ ZynAddSubFX}
             if (!fname)
                 return;
         }
+        synth->assignedMidiControls.clear(); //clear the midiControllers
         int result = synth->loadXML(fname); // load the data
         synth->cleanUp();
         npartcounter->value(1);
@@ -987,7 +988,9 @@ ZynAddSubFX}
         inseffnocounter->do_callback();
         masterkeyshift->value(synth->Pkeyshift - 64);
         mastervolumedial->value(synth->Pvolume);
+        mastervolumedial->refreshParameter();
         globalfinedetune->value(synth->microtonal.Pglobalfinedetune);
+        globalfinedetune->refreshParameter();
         microtonalui = new MicrotonalUI(&synth->microtonal);
         //updateSendWindow();
         for (int neff1 = 0; neff1 < NUM_SYS_EFX; ++neff1)
