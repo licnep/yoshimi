@@ -336,7 +336,10 @@ void SynthEngine::setController(unsigned char channel, unsigned char ctrltype, u
                 i->execute(par);
             }
 	}
-
+    /*
+     * OLD MIDI controller code, something can still be keeped. But for now  we deactivate
+     * all 'standard' midi controllers, because they're just annoying in the midiLearn branch
+     *
     switch (ctrltype)
     {
         case C_bankselectmsb:
@@ -364,7 +367,7 @@ void SynthEngine::setController(unsigned char channel, unsigned char ctrltype, u
         for (int nefx = 0; nefx < NUM_INS_EFX; ++nefx)
             insefx[nefx]->cleanup();
         synth->unlockSharable();
-    }
+    }*/
 }
 
 
