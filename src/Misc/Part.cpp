@@ -645,7 +645,7 @@ void Part::SetController(unsigned int type, int par)
         case C_modwheel:
             ctl->setmodwheel(par);
             break;
-
+/*
         // 3 ADsynth + PADsynth amplitude LFO depth
         case C_undefined3:
             if (par >= 0 && par < 128)
@@ -671,7 +671,7 @@ void Part::SetController(unsigned int type, int par)
             ctl->setpanning(par);
             setPpanning(Ppanning);
             break;
-
+*/
         // 11 Expression
         case C_expression:
             ctl->setexpression(par);
@@ -684,7 +684,7 @@ void Part::SetController(unsigned int type, int par)
             if (!ctl->sustain.sustain)
                 RelaseSustainedKeys();
             break;
-
+               /*
         // 65 Portamento
         case C_portamento:
             ctl->setportamento(par);
@@ -839,7 +839,7 @@ void Part::SetController(unsigned int type, int par)
         // 123 All Notes Off
         case C_allnotesoff:
             RelaseAllKeys();
-            break;
+            break;*/
 
         default:
             //Runtime.Log(string("Ignoring midi control change type ") + asString(type));
