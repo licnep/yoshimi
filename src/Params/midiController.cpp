@@ -126,11 +126,21 @@ void midiController::setLabel(const char* str) {
 void midiController::setMidiCCNumber(int n) {
     if (n<0||n>127) return;
     this->ccNumber = n;
-    recording=0;
     //i update the spinner widget if the midiCC window is open:
     if (SpinnerInMidiCCPanel==NULL||SpinnerInMidiCCPanel->value()==n) return;
     SpinnerInMidiCCPanel->value(n);
     SpinnerInMidiCCPanel = NULL;
+}
+
+void midiController::setChannel(int ch) {
+    midiChannel = ch;
+}
+
+void midiController::record(int channel,int ccN) {
+    this->ccNumber = ccN;
+    this->midiChannel = channel;
+    MidiRackUI->Record(channel,ccN);
+    this->recording = 0;
 }
 
 midiController::~midiController() {
@@ -1097,10 +1107,6 @@ void midiController::setMax(double v) {
 void midiController::setMin(double v) {
     if (v<param.min) v=param.min;
     customMin = v;
-}
-
-void midiController::setChannel(int ch) {
-    midiChannel = ch;
 }
 
 void midiController::add2XML(XMLwrapper *xml) {

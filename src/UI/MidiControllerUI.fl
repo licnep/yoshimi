@@ -117,6 +117,7 @@ class MidiCCRack {open : {public Fl_Group}
       spinner->value(contr->ccNumber);
       Channelspinner->value(contr->midiChannel+1);
       contr->duplicatedKnobCreated(dial);
+      contr->MidiRackUI = this;
       dial->maximum(contr->param.max);
       dial->minimum(contr->param.min);
       minInput->value(contr->customMin);
@@ -124,6 +125,12 @@ class MidiCCRack {open : {public Fl_Group}
       maxInput->value(contr->customMax);
       maxInput->minimum(contr->param.max);
       if(controller->knob!=NULL) {dial->value(controller->knob->value());}} {}
+  }
+  Function {Record(int channel, int ccNumber)} {open return_type void
+  } {
+    code {this->controller->recording=1;
+     this->spinner->value(ccNumber);
+     this->Channelspinner->value(channel+1);} {}
   }
   Function {startRecording(Fl_Widget* w, void* p)} {open private return_type {static void}
   } {

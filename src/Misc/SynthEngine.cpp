@@ -331,7 +331,10 @@ void SynthEngine::setController(unsigned char channel, unsigned char ctrltype, u
 {
 	list<midiController>::iterator i;
 	for(i=assignedMidiControls.begin();i!=assignedMidiControls.end();i++) {
-            if (i->recording) {i->setMidiCCNumber(ctrltype);}
+            if (i->recording) {
+                i->record(channel,ctrltype);
+                printf("RECORDED\n");
+            }
             if (i->ccNumber==ctrltype&&i->midiChannel==channel) {
                 i->execute(par);
             }

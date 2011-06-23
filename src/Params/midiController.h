@@ -13,6 +13,8 @@
 #include "ParamChangeFunc.h"
 #include "Effects/EffectMgr.h"
 
+//forward declaration of the midiCCrack
+class MidiCCRack;
 
 class midiController {
 public:
@@ -35,6 +37,7 @@ public:
     void setMin(double v);
     void setMax(double v);
     void setChannel(int ch);
+    void record(int channel,int ccN);
 
     int midiChannel;
     int ccNumber;
@@ -47,6 +50,7 @@ public:
     WidgetPDial* knob;
     WidgetPDial* DuplicatedKnobInMidiCCPanel;
     Fl_Spinner* SpinnerInMidiCCPanel;
+    MidiCCRack* MidiRackUI;
 
 private:
     void rotateDial(double val);
