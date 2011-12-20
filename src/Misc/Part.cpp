@@ -813,12 +813,12 @@ void Part::SetController(unsigned int type, int par)
             if (kit[FilterLfoControlLsb].Padenabled && par >= 0 && par < 128)
                 kit[FilterLfoControlLsb].adpars->GlobalPar.FilterEnvelope->PR_dt = par;
             break;
-
+                */
         // 120 All Sound Off
         case C_allsoundsoff:
             AllNotesOff();
             break;
-
+            /*
         // 121 Reset All Controllers
         case C_resetallcontrollers:
             ctl->resetall();
@@ -835,11 +835,11 @@ void Part::SetController(unsigned int type, int par)
                 }
             FilterLfoControlLsb = 0;
             break;
-
+             */
         // 123 All Notes Off
         case C_allnotesoff:
             RelaseAllKeys();
-            break;*/
+            break;
 
         default:
             //Runtime.Log(string("Ignoring midi control change type ") + asString(type));
